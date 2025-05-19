@@ -6,13 +6,31 @@
 //
 
 import SwiftUI
+import GoogleSignIn
+import GoogleSignInSwift
 
 struct AuthView: View {
+    
+    @Environment(AuthController.self) private var authController
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Spacer()
+            GoogleSignInButton(scheme: .dark, style: .standard, state: .normal) {
+                signIn()
+            }
+        }
+        .padding()
     }
-}
-
-#Preview {
-    AuthView()
+    
+    @MainActor
+    func signIn() {
+        Task {
+            do {
+                try await authController.signIn()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }

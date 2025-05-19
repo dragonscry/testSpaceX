@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct MainView: View {
+    
+    @Environment(AuthController.self) private var authController
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Group {
+            switch authController.authState {
+            case .undefined:
+                ProgressView()
+            case .authenticated:
+                ContentView()
+            case .notAuthenticated:
+                AuthView()
+            }
+        }
+        .task {
+            await authController.startListeningToAuthState()
+        }
     }
 }
 

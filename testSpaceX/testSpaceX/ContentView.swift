@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @Environment(AuthController.self) private var authController
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("HELLO!")
+            Button("Sign out") {
+                signOut()
+            }
         }
-        .padding()
     }
-}
-
-#Preview {
-    ContentView()
+    
+    func signOut() {
+        do {
+            try authController.signOut()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
 }
